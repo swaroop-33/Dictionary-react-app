@@ -1,0 +1,142 @@
+/* Global theme variables */
+:root {
+  --bg: #0b0e12;
+  --surface: #11161c;
+  --card: #121923;
+  --card-2: #0f151d;
+  --text: #e6e9ef;
+  --muted: #9aa6b2;
+  --brand: #6ea8ff;
+  --brand-2: #9b8cff;
+  --ring: rgba(110,168,255,.55);
+  --border: #1f2a37;
+  --chip: #1b2430;
+  --shadow: 0 12px 30px rgba(0,0,0,.35);
+  --radius: 16px;
+}
+
+* { box-sizing: border-box; }
+html, body, #root { height: 100%; }
+body {
+  margin: 0;
+  color: var(--text);
+  background: radial-gradient(1200px 700px at 0% 0%, #0e1320 0%, #0b0e12 45%, #0b0e12 100%);
+  font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  letter-spacing: .1px;
+}
+
+.container {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 28px 18px 64px;
+}
+
+/* Sticky header band */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  backdrop-filter: saturate(160%) blur(10px);
+  background: linear-gradient(180deg, rgba(11,14,18,.9), rgba(11,14,18,.65));
+  border-bottom: 1px solid var(--border);
+}
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 14px 18px;
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.brand { display: flex; flex-direction: column; gap: 4px; }
+.brand h1 {
+  margin: 0; font-size: 28px; font-weight: 800; letter-spacing: .2px;
+  background: linear-gradient(90deg, var(--brand), var(--brand-2));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.brand p { margin: 0; font-size: 13px; color: var(--muted); }
+
+/* Dark mode switch */
+.toggle {
+  border: 1px solid var(--border);
+  background: var(--card-2);
+  color: var(--text);
+  border-radius: 999px;
+  padding: 8px 12px;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+}
+
+/* Search row */
+.search-row { display: flex; gap: 10px; margin: 18px 0 22px; }
+.input {
+  flex: 1; padding: 14px 14px; border-radius: 12px;
+  border: 1px solid var(--border); color: var(--text);
+  background: linear-gradient(180deg, #0f141b, #0b1017);
+  outline: none; transition: box-shadow .15s ease, border-color .15s ease;
+}
+.input:focus { border-color: var(--brand); box-shadow: 0 0 0 4px var(--ring); }
+
+.btn {
+  padding: 12px 16px; border-radius: 12px; border: 1px solid #2a3340;
+  color: #0b0e12; background: linear-gradient(180deg, #eaf2ff, #cfe1ff);
+  font-weight: 700; cursor: pointer;
+}
+.btn:disabled { opacity: .65; cursor: not-allowed; }
+
+/* Cards */
+.card {
+  background: linear-gradient(180deg, var(--card), var(--card-2));
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 18px;
+}
+
+.section-title { font-weight: 700; margin: 0 0 10px; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  background: var(--chip); border: 1px solid var(--border);
+  color: var(--text); padding: 6px 10px; border-radius: 999px; font-size: 13px;
+}
+
+.grid { display: grid; gap: 12px; }
+@media (min-width: 720px) {
+  .grid-2 { grid-template-columns: 1fr 1fr; }
+  .grid-4 { grid-template-columns: repeat(4, 1fr); }
+}
+
+.definition { font-weight: 600; }
+.example { color: var(--muted); font-size: 13px; margin-top: 4px; }
+
+/* Pronunciation */
+.pron { display: inline-flex; align-items: center; gap: 8px; margin-top: 8px; }
+.play {
+  border: 1px solid var(--border); background: var(--chip); color: var(--text);
+  border-radius: 8px; padding: 6px 10px; cursor: pointer;
+}
+
+/* Skeleton loader */
+.skel {
+  border-radius: 12px;
+  background: linear-gradient(90deg, #111722 25%, #0f141d 37%, #111722 63%);
+  background-size: 400% 100%;
+  animation: shimmer 1.2s infinite linear;
+  height: 110px;
+}
+@keyframes shimmer { 100% { background-position: -125% 0; } }
+
+/* Empty/error */
+.empty, .error {
+  border: 1px dashed var(--border);
+  border-radius: 14px; padding: 16px; text-align: center;
+  color: var(--muted); background: #0c1219;
+}
+.error { color: #ffb4b4; border-color: #573333; background: #1a0e0e; }
+
+/* Footer */
+.footer { margin-top: 28px; color: var(--muted); font-size: 13px; text-align: center; opacity: .9; }
+kbd { background: #0d1219; border: 1px solid var(--border); border-radius: 6px; padding: 2px 6px; font-size: 12px; }
