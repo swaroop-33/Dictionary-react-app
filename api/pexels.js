@@ -1,29 +1,43 @@
-// Serverless proxy for Pexels API
-export default async function handler(req, res) {
-  try {
-    const { query = "", per_page = "8" } = req.query || {};
-    const key = process.env.PEXELS_API_KEY || process.env.VITE_PEXELS_API_KEY;
+// Edge Function: proxy Pexels API
+export const config = { runtime: "edge" };
 
+export default async function handler(req) {
+  try {
+    const url = new URL(req.url);
+    const query = (url.searchParams.get("query") || "").trim();
+    const perPage = url.searchParams.get("per_page") || "8";
+
+    const key = process.env.PEXELS_API_KEY || process.env.VITE_PEXELS_API_KEY;
     if (!key) {
-      res.status(500).json({ error: "Missing PEXELS_API_KEY in Vercel env" });
-      return;
+      return new Response(JSON.stringify({ error: "Missing PEXELS_API_KEY in Vercel env" }), {
+        status: 500,
+        headers: { "content-type": "application/json" },
+      });
     }
     if (!query) {
-      res.status(400).json({ error: "Missing 'query' param" });
-      return;
+      return new Response(JSON.stringify({ error: "Missing 'query' param" }), {
+        status: 400,
+        headers: { "content-type": "application/json" },
+      });
     }
 
     const upstream = await fetch(
-      `https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=${encodeURIComponent(per_page)}`,
+      `https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=${encodeURIComponent(perPage)}`,
       { headers: { Authorization: key } }
     );
 
-    const text = await upstream.text(); // pass-through
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Content-Type", "application/json; charset=utf-8");
-    res.status(upstream.status).send(text);
+    const body = await upstream.text();
+    return new Response(body, {
+      status: upstream.status,
+      headers: {
+        "content-type": "application/json; charset=utf-8",
+        "access-control-allow-origin": "*",
+      },
+    });
   } catch (err) {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.status(500).json({ error: "Pexels proxy failed", detail: String(err) });
+    return new Response(JSON.stringify({ error: "Pexels proxy failed", detail: String(err) }), {
+      status: 500,
+      headers: { "content-type": "application/json", "access-control-allow-origin": "*" },
+    });
   }
 }
